@@ -1,12 +1,29 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{{ asset('img/favicon.ico') }}">
+
+    <title>{% block title '' %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ asset('css/vendor/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ asset('css/vendor/dashboard.css') }}" rel="stylesheet">
+    {% block stylesheets '' %}
+</head>
+
+<body>
+
+{% block content '' %}
+
+{% block javascripts '' %}
+
+{% block final_javascripts '' %}
+
+</body>
 </html>
