@@ -22,6 +22,7 @@
         "symfony/validator": "^4.1",
         "symfony/web-link": "^4.1",
         "symfony/webpack-encore-pack": "*",
+        "symfony/workflow": "^4.1",
         "symfony/yaml": "^4.1"
     },
     "require-dev": {

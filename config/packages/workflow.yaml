@@ -1,0 +1,33 @@
+framework:
+    workflows:
+        box_creation:
+            type: 'state_machine'
+            marking_store:
+                type: 'single_state'
+                arguments:
+                    - 'status'
+            supports:
+                - App\Entity\Box
+            initial_place: box_created
+            places:
+                - box_created
+                - waiting_for_products
+                - validation
+                - invalidated
+                - go
+            transitions:
+                created_box:
+                    from: box_created
+                    to:   waiting_for_products
+                to_validation:
+                    from: waiting_for_products
+                    to:   validation
+                validate:
+                    from: validation
+                    to:   go
+                invalidate:
+                    from: validation
+                    to:   invalidated
+                revalidation:
+                    from: invalidated
+                    to:   waiting_for_products
