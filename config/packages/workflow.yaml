@@ -11,16 +11,16 @@ framework:
             initial_place: box_created
             places:
                 - box_created
-                - waiting_for_products
+                - box_filled
                 - validation
                 - invalidated
                 - go
             transitions:
-                created_box:
+                add_products:
                     from: box_created
-                    to:   waiting_for_products
-                to_validation:
-                    from: waiting_for_products
+                    to:   box_filled
+                order_products:
+                    from: box_filled
                     to:   validation
                 validate:
                     from: validation
@@ -28,6 +28,6 @@ framework:
                 invalidate:
                     from: validation
                     to:   invalidated
-                revalidation:
+                add_products_invalidated:
                     from: invalidated
-                    to:   waiting_for_products
+                    to:   box_filled

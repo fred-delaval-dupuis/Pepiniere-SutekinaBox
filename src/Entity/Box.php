@@ -11,9 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Box
 {
-    const BOX_CREATED = 'box_created';
-    const BOX_WAITING_PRODUCT = 'box_waiting_product';
-    const BOX_VALIDATED = 'box_validated';
+    const BOX_CREATED           = 'box_created';
+    const WAITING_FOR_PRODUCTS  = 'waiting_for_products';
+    const VALIDATION            = 'validation';
+    const INVALIDATED           = 'invalidated';
+    const GO                    = 'go';
 
     /**
      * @ORM\Id()

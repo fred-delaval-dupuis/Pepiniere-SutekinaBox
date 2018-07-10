@@ -13,14 +13,37 @@ box_create:
     path: /box/create
     controller: App\Controller\BoxController::create
 
+box_view:
+    path: /box/{id}
+    controller: App\Controller\BoxController::view
+    requirements:
+        id: '\d+'
+
+box_edit:
+    path: /box/edit/{id}
+    controller: App\Controller\BoxController::edit
+    requirements:
+        id: '\d+'
+
+box_add:
+    path: /box/add/{id}
+    controller: App\Controller\BoxController::addProducts
+    requirements:
+        id: '\d+'
+box_order:
+    path: /box/order/{id}
+    controller: App\Controller\BoxController::order
+    requirements:
+        id: '\d+'
+
 box_validate:
     path: /box/validate/{id}
     controller: App\Controller\BoxController::validate
     requirements:
         id: '\d+'
 
-box_view:
-    path: /box/{id}
-    controller: App\Controller\BoxController::view
+box_invalidate:
+    path: /box/invalidate/{id}
+    controller: App\Controller\BoxController::invalidate
     requirements:
         id: '\d+'

@@ -9,6 +9,7 @@
 namespace App\Controller;
 
 use App\Entity\Box;
+use App\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -23,6 +24,10 @@ class AdminController extends Controller
     public function index()
     {
         $boxes = $this->getDoctrine()->getRepository(Box::class)->findAll();
+
+        $usersFromRole = $this->getDoctrine()->getRepository(User::class)->getUsersFromRole('ROLE_BOX_VALIDATOR');
+
+        dump($usersFromRole);
 
         return $this->render('Admin/index.html.twig', [
             'boxes' => $boxes,
