@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Box;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -47,4 +48,18 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getProductsFromBox(Box $box)
+    {
+        return $this->createQueryBuilder('p')
+            ->from('App\Entity\BoxProduct', 'bp')
+            ->from('App\Entity\Box' ,'b')
+            ->where('p.id = bp.id')
+            ->andWhere('bp.id = b.id')
+            ->andWhere('b.id = :id')
+            ->setParameter('id', $box->getId())
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

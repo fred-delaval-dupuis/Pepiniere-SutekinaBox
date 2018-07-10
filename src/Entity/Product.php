@@ -15,44 +15,73 @@ class Product
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @var int
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @var string
      */
     private $label;
 
     /**
      * @ORM\Column(type="text")
+     *
+     * @var string
      */
     private $description;
 
     /**
      * @ORM\Column(type="integer")
+     *
+     * @var int
      */
     private $price;
 
     /**
      * @ORM\Column(type="integer")
+     *
+     * @var int
      */
     private $stock;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Supplier", inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @var Supplier
      */
     private $supplier;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\BoxProduct", mappedBy="product", orphanRemoval=true)
+     *
+     * @var ArrayCollection
      */
     private $boxProducts;
 
-    public function __construct()
+    /**
+     * Product constructor.
+     * @param string $label
+     * @param string $description
+     * @param int $price
+     * @param int $stock
+     * @param Supplier $supplier
+     * @param ArrayCollection $boxProducts
+     */
+    public function __construct(string $label = null, string $description = null, int $price = null, int $stock = null, Supplier $supplier = null, ArrayCollection $boxProducts = null)
     {
-        $this->boxProducts = new ArrayCollection();
+        $this->label = $label;
+        $this->description = $description;
+        $this->price = $price;
+        $this->stock = $stock;
+        $this->supplier = $supplier;
+        $this->boxProducts = $boxProducts ?: new ArrayCollection();
     }
+
 
     /**
      * @return mixed

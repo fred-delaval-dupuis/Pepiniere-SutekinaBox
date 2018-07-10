@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Login Template for Bootstrap
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- Custom styles for this template -->
+    <link href="{{ asset('css/vendor/login.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    {{ form_start(form, {'attr': {'class': 'form-signin'}}) }}
+    <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">{{ 'admin.login.title' | trans }}Please sign in</h1>
+
+    {# Email input #}
+    {{ form_label(form.email) }}
+    {{ form_errors(form.email) }}
+    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+    {{ form_help(form.email) }}
+
+    {# Password input #}
+    {{ form_label(form.password) }}
+    {{ form_errors(form.password) }}
+    {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+    {{ form_help(form.password) }}
+
+    {# Submit Button #}
+    {{ form_widget(form.submit, {'attr': {'class': 'btn btn-lg btn-primary btn-block'}}) }}
+
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block final_javascripts %}
+    <script>
+        $( document ).ready(function() {
+            $('body').addClass('text-center');
+        };
+    </script>
+{% endblock %}

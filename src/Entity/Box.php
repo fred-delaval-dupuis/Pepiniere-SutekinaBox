@@ -11,6 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Box
 {
+    const BOX_CREATED = 'box_created';
+    const BOX_WAITING_PRODUCT = 'box_waiting_product';
+    const BOX_VALIDATED = 'box_validated';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -40,13 +44,14 @@ class Box
     private $boxProducts;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=64)
      */
     private $status;
 
     public function __construct()
     {
         $this->boxProducts = new ArrayCollection();
+        $this->test = new ArrayCollection();
     }
 
     /**
@@ -162,18 +167,18 @@ class Box
     }
 
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getStatus(): ?int
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
     /**
-     * @param int $status
+     * @param string $status
      * @return Box
      */
-    public function setStatus(int $status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 

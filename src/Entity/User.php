@@ -198,9 +198,13 @@ class User implements UserInterface
     /**
      * @return Collection|Role[]
      */
-    public function getRoles(): Collection
+    public function getRoles()
     {
-        return $this->roles;
+        $roles = [];
+        foreach ($this->roles as $role) {
+            $roles[] = $role->getTitle();
+        }
+        return $roles;
     }
 
     /**

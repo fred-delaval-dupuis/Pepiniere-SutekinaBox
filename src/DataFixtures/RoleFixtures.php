@@ -19,6 +19,7 @@ class RoleFixtures extends Fixture implements OrderedFixtureInterface
             'ROLE_USER',
             'ROLE_BOX_CREATOR',
             'ROLE_BOX_VALIDATOR',
+            'ROLE_SUPER_ADMIN',
         ];
 
         $i = 1;

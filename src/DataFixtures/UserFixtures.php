@@ -42,7 +42,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
                 'lastName'  => 'Delaval',
                 'email'     => 'f.delaval@test.xyz',
                 'password'  => 'testtest',
-                'roles'     => new ArrayCollection([$this->getReference('role_1')]),
+                'roles'     => new ArrayCollection([$this->getReference('role_5')]),
                 'service'   => $this->getReference('service_3'),
             ],
             [

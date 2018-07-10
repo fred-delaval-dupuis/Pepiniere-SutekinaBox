@@ -13,35 +13,65 @@ class BoxProduct
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @var int
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     *
+     * @var int
      */
     private $quantity;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var \DateTime
      */
     private $receptionDate;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
+     *
+     * @var boolean
      */
     private $valid;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Box", inversedBy="boxProducts")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @var Box
      */
     private $box;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="boxProducts")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @var Product
      */
     private $product;
+
+    /**
+     * BoxProduct constructor.
+     * @param Box|null $box
+     * @param Product|null $product
+     * @param int|null $quantity
+     * @param \DateTime|null $receptionDate
+     * @param bool|null $valid
+     */
+    public function __construct(Box $box = null, Product $product = null, int $quantity = null, \DateTime $receptionDate = null, bool $valid = null)
+    {
+        $this->quantity = $quantity;
+        $this->receptionDate = $receptionDate;
+        $this->valid = $valid;
+        $this->box = $box;
+        $this->product = $product;
+    }
+
 
     /**
      * @return mixed

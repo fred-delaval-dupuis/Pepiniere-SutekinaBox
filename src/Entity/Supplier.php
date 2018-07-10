@@ -33,9 +33,17 @@ class Supplier
      */
     private $products;
 
-    public function __construct()
+    /**
+     * Supplier constructor.
+     * @param $name
+     * @param $email
+     * @param $products
+     */
+    public function __construct(string $name = null, string $email = null, ArrayCollection $products = null)
     {
-        $this->products = new ArrayCollection();
+        $this->name = $name;
+        $this->email = $email;
+        $this->products = $products ?: new ArrayCollection();;
     }
 
     /**

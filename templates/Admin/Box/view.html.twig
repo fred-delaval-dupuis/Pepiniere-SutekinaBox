@@ -1,0 +1,23 @@
+{% extends 'Admin/layout.html.twig' %}
+
+{% block main_content %}
+    {{ box.title }} | {{ box.budget }} | {{ box.user.lastName }} | {{ box.status }}
+
+    {% if boxProducts %}
+        {% for boxProduct in boxProducts %}
+            <div>
+                <p>{{ boxProduct.product.label }}</p>
+                <p>{{ boxProduct.product.description }}</p>
+                <p>{{ boxProduct.product.price }}</p>
+                <p>{{ boxProduct.quantity }}</p>
+                {% if boxProduct.receptionDate %}
+                    <p>{{ boxProduct.receptionDate }}</p>
+                {% endif %}
+                {% if boxProduct.valid %}
+                    <p>{{ boxProduct.valid }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+

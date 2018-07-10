@@ -1,3 +1,26 @@
 index:
     path: /
     controller: App\Controller\AdminController::index
+
+security_login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+
+security_logout:
+    path: /logout
+
+box_create:
+    path: /box/create
+    controller: App\Controller\BoxController::create
+
+box_validate:
+    path: /box/validate/{id}
+    controller: App\Controller\BoxController::validate
+    requirements:
+        id: '\d+'
+
+box_view:
+    path: /box/{id}
+    controller: App\Controller\BoxController::view
+    requirements:
+        id: '\d+'

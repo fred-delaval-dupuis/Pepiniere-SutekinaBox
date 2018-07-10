@@ -65,4 +65,11 @@ class Role
         $this->title = $title;
         return $this;
     }
+
+    public function getReachableRoles(array $roles)
+    {
+        // TODO: Implement getReachableRoles() method.
+    }
+
+
 }

@@ -1,0 +1,12 @@
+{% extends 'Admin/layout.html.twig' %}
+
+{% block main_content %}
+    {% if boxes %}
+        <ul>
+        {% for box in boxes %}
+            <li><a href="{{ url('admin_box_view', {id: box.id}) }}">{{ box.title }} | {{ box.budget }} | {{ box.user.lastName }} | {{ box.status }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+{% endblock %}
