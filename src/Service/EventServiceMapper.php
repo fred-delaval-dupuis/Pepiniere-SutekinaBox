@@ -16,11 +16,31 @@ class EventServiceMapper
 
     private static $mappings = [
         'transitions' => [
-            'add_products' => 'ROLE_BOX_CREATOR',
-            'order_products' => 'ROLE_BOX_VALIDATOR',
-            'validate' => 'ROLE_BOX_CREATOR',
-            'invalidate' => 'ROLE_BOX_CREATOR',
-            'add_products_invalidated' =>  'ROLE_BOX_CREATOR',
+            'add_products' => [
+                'role'          => 'ROLE_BOX_CREATOR',
+                'mail-subject'    => 'Box %s products are ready to be ordered',
+                'mail-body'     => 'The Box %s is ready to get to the next step. Please see to the ordering of the products in this <a href="">Box here</a>'
+            ],
+            'order_products' => [
+                'role'          => 'ROLE_BOX_VALIDATOR',
+                'mail-subject'    => 'Box %s - Products ordered',
+                'mail-body'     => 'The products for the Box %s have been ordered. Please be patient while we receive all the products and verify their conformity!'
+            ],
+            'validate' => [
+                'role'          => 'ROLE_BOX_CREATOR',
+                'mail-subject'    => 'Box %s has been validated',
+                'mail-body'     => 'The Box %s has been validated. It is a "go" for us, so the Box has been sent to Packaging!'
+            ],
+            'invalidate' => [
+                'role'          => 'ROLE_BOX_CREATOR',
+                'mail-subject'    => 'Box %s has been invalidated',
+                'mail-body'     => 'Sorry, the Box %s has been deemed unsendable. Please see the description in the Box panel to update its content!'
+            ],
+            'add_products_invalidated' => [
+                'role'          => 'ROLE_BOX_CREATOR',
+                'mail-subject'    => 'Box %s needs to be updated',
+                'mail-body'     => 'Sorry, the Box %s has been deemed unsendable. Please, select other products to be part of the Box!'
+            ],
         ],
         'places' => [
             'box_created' => 'ROLE_BOX_CREATOR',
@@ -32,16 +52,48 @@ class EventServiceMapper
     ];
 
     /**
+     * @param string $attr
      * @param string $key
      * @param string $type
      * @return null|string
      */
-    public function get(string $key, string $type = self::PLACES): ?string
+    private function get(string $attr, string $key, string $type = self::TRANSITIONS): ?string
     {
         if (isset (self::$mappings[$type][$key])) {
-            return self::$mappings[$type][$key];
+            return self::$mappings[$type][$key][$attr];
         } else {
             return null;
         }
     }
+
+    /**
+     * @param string $key
+     * @param string $type
+     * @return null|string
+     */
+    public function getRole(string $key, string $type = self::TRANSITIONS): ?string
+    {
+        return $this->get('role', $key, $type);
+    }
+
+    /**
+     * @param string $key
+     * @param string $type
+     * @return null|string
+     */
+    public function getMailSubject(string $key, string $type = self::TRANSITIONS): ?string
+    {
+        return $this->get('mail-subject', $key, $type);
+    }
+
+    /**
+     * @param string $key
+     * @param string $type
+     * @return null|string
+     */
+    public function getMailBody(string $key, string $type = self::TRANSITIONS): ?string
+    {
+        return $this->get('mail-body', $key, $type);
+    }
+
 }
