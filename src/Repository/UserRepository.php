@@ -51,7 +51,7 @@ class UserRepository extends ServiceEntityRepository
     public function getUsersFromRole(string $role): ?array
     {
         return $this->createQueryBuilder('u')
-            ->innerJoin('App\Entity\Role', 'r')
+            ->innerJoin('u.roles', 'r')
             ->where('r.title = :title')
             ->setParameter('title', $role)
             ->getQuery()
