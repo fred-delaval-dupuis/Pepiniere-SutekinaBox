@@ -221,27 +221,25 @@ class BoxController extends AbstractController
 
             dump($submittedProducts);
 
-            $newProducts = array_udiff($submittedProducts, $currentProducts, [$this, 'productDiff']);
-            dump($newProducts);
+            $productsToAdd = array_udiff($submittedProducts, $currentProducts, [$this, 'productDiff']);
 
-            $deleteProducts = array_udiff($currentProducts, $submittedProducts, [$this, 'productDiff']);
-            dump($deleteProducts);
+            $productsToDelete = array_udiff($currentProducts, $submittedProducts, [$this, 'productDiff']);
 
             # Product <-> Box deletion
+            $boxProductsToDelete = $em->getRepository(BoxProduct::class)->findBy(['product' => $productsToDelete]);
 
-            $boxProducts = $em->getRepository(BoxProduct::class)->findBy(['id' => [array_map(function($product) { return $product->getId(); }, $deleteProducts)]]);
-            dump(array_map(function($product) { return $product->getId(); }, $deleteProducts));
-            dump($boxProducts);
+            foreach ($boxProductsToDelete as $boxProductToDelete) {
+                $em->remove($boxProductToDelete);
+            }
 
-            return $this->render('Admin/index.html.twig');
-
+            # Product <-> Box addition
             /**
-             * @var Product $product
+             * @var Product $productToAdd
              */
-            foreach ($products as $product) {
-                $boxProduct = new BoxProduct($box, $product);
+            foreach ($productsToAdd as $productToAdd) {
+                $boxProduct = new BoxProduct($box, $productToAdd);
                 $box->addBoxProduct($boxProduct);
-                $product->addBoxProduct($boxProduct);
+                $productToAdd->addBoxProduct($boxProduct);
                 $em->persist($boxProduct);
             }
 
