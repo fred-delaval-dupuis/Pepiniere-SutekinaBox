@@ -52,14 +52,12 @@ class ProductRepository extends ServiceEntityRepository
     public function getProductsFromBox(Box $box)
     {
         return $this->createQueryBuilder('p')
-            ->from('App\Entity\BoxProduct', 'bp')
-            ->from('App\Entity\Box' ,'b')
-            ->where('p.id = bp.id')
-            ->andWhere('bp.id = b.id')
-            ->andWhere('b.id = :id')
+            ->innerJoin('p.boxProducts', 'bp')
+            ->innerJoin('bp.box', 'b')
+            ->where('b.id = :id')
             ->setParameter('id', $box->getId())
             ->getQuery()
             ->getResult()
-            ;
+        ;
     }
 }

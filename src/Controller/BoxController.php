@@ -12,11 +12,13 @@ namespace App\Controller;
 use App\Entity\Box;
 use App\Entity\BoxProduct;
 use App\Entity\Product;
+use App\Form\BoxProductsType;
 use App\Form\BoxType;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Workflow\Exception\TransitionException;
 use Symfony\Component\Workflow\Registry;
 
@@ -44,16 +46,16 @@ class BoxController extends AbstractController
             $box->setStatus(BOX::BOX_CREATED);
             $box->setUser($this->getUser());
 
-            $products = $em->getRepository(Product::class)->findAll();
-
-            foreach ($products as $product) {
-                $boxProduct = new BoxProduct($box, $product, 1);
-                $box->addBoxProduct($boxProduct);
-                $product->addBoxProduct($boxProduct);
-
-                $em->persist($boxProduct);
-                // No need for product as it comes from a repository, so is already persisted
-            }
+//            $products = $em->getRepository(Product::class)->findAll();
+//
+//            foreach ($products as $product) {
+//                $boxProduct = new BoxProduct($box, $product, 1);
+//                $box->addBoxProduct($boxProduct);
+//                $product->addBoxProduct($boxProduct);
+//
+//                $em->persist($boxProduct);
+//                // No need for product as it comes from a repository, so is already persisted
+//            }
 
             // Workflow Management - current place is 'box_created', transitioning to waiting_for_products
             $workflow = $workflows->get($box);
@@ -63,6 +65,7 @@ class BoxController extends AbstractController
                     $workflow->apply($box, 'add_product');
                 } catch (TransitionException $e) {
                     $this->logTransitionError($logger, $e, $box);
+                    return $this->redirectToRoute('admin_index');
                 }
             }
 
@@ -111,28 +114,163 @@ class BoxController extends AbstractController
      * @Security("is_granted('ROLE_BOX_CREATOR')")
      *
      * @param Box $box
+     * @param Request $request
      * @param Registry $workflows
      * @param LoggerInterface $logger
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @param TranslatorInterface $translator
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function addProducts(Box $box, Registry $workflows, LoggerInterface $logger)
+    public function addProducts(Box $box, Request $request, Registry $workflows, LoggerInterface $logger, TranslatorInterface $translator)
     {
+        $em = $this->getDoctrine()->getManager();
+
         if (null === $box) {
             return $this->redirectToRoute('admin_index');
         }
 
-        $workflow = $workflows->get($box);
+        $form = $this->createForm(BoxProductsType::class);
 
-        if ($workflow->can($box, 'add_products')) {
-            try {
-                $workflow->apply($box, 'add_products');
-                $this->getDoctrine()->getManager()->flush();
-            } catch (TransitionException $e) {
-                $this->logTransitionError($logger, $e, $box);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            # Products Management
+            $products = $form->getData()['products'];
+
+            dump($products);
+            return $this->render('Admin/index.html.twig');
+
+            /**
+             * @var Product $product
+             */
+            foreach ($products as $product) {
+                $boxProduct = new BoxProduct($box, $product);
+                $box->addBoxProduct($boxProduct);
+                $product->addBoxProduct($boxProduct);
+                $em->persist($boxProduct);
             }
+
+            $em->flush();
+
+            // if the user clicked on submit, we go to the next transition
+            if ($form->get('submit')->isClicked()) {
+                # Workflow Management
+                $workflow = $workflows->get($box);
+
+                if ($workflow->can($box, 'add_products')) {
+                    try {
+                        $workflow->apply($box, 'add_products');
+                        $em->flush();
+                    } catch (TransitionException $e) {
+                        $em->clear();
+                        $this->logTransitionError($logger, $e, $box);
+                        return $this->redirectToRoute('admin_index');
+                    }
+                }
+
+                if ($workflow->can($box, 'add_products_invalidated')) {
+                    try {
+                        $workflow->apply($box, 'add_products_invalidated');
+                        $em->flush();
+                    } catch (TransitionException $e) {
+                        $em->clear();
+                        $this->logTransitionError($logger, $e, $box);
+                        return $this->redirectToRoute('admin_index');
+                    }
+                }
+            }
+
+            $this->addFlash('notice', $translator->trans('admin.notice.box.products.added'));
+            return $this->redirectToRoute('admin_index');
         }
 
-        return $this->redirectToRoute('admin_index');
+        return $this->render('Admin/Box/add_products.html.twig', [
+            'box'   => $box,
+            'form'  => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Security("is_granted('ROLE_BOX_CREATOR')")
+     *
+     * @param Box $box
+     * @param Request $request
+     * @param Registry $workflows
+     * @param LoggerInterface $logger
+     * @param TranslatorInterface $translator
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function editProducts(Box $box, Request $request, Registry $workflows, LoggerInterface $logger, TranslatorInterface $translator)
+    {
+//        $this->addFlash('notice', 'Sorry, too complex to implement here...');
+//        return $this->redirectToRoute('admin_index');
+
+        $em = $this->getDoctrine()->getManager();
+
+        if (null === $box) {
+            return $this->redirectToRoute('admin_index');
+        }
+
+        $form = $this->createForm(BoxProductsType::class, ['products' => $em->getRepository(Product::class)->getProductsFromBox($box)]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            # Products Management
+            $products = $form->getData()['products'];
+
+//            dump($products);
+            return $this->render('Admin/index.html.twig');
+
+            /**
+             * @var Product $product
+             */
+            foreach ($products as $product) {
+                $boxProduct = new BoxProduct($box, $product);
+                $box->addBoxProduct($boxProduct);
+                $product->addBoxProduct($boxProduct);
+                $em->persist($boxProduct);
+            }
+
+            $em->flush();
+
+            // if the user clicked on submit, we go to the next transition
+            if ($form->get('submit')->isClicked()) {
+                # Workflow Management
+                $workflow = $workflows->get($box);
+
+                if ($workflow->can($box, 'add_products')) {
+                    try {
+                        $workflow->apply($box, 'add_products');
+                        $em->flush();
+                    } catch (TransitionException $e) {
+                        $em->clear();
+                        $this->logTransitionError($logger, $e, $box);
+                        return $this->redirectToRoute('admin_index');
+                    }
+                }
+
+                if ($workflow->can($box, 'add_products_invalidated')) {
+                    try {
+                        $workflow->apply($box, 'add_products_invalidated');
+                        $em->flush();
+                    } catch (TransitionException $e) {
+                        $em->clear();
+                        $this->logTransitionError($logger, $e, $box);
+                        return $this->redirectToRoute('admin_index');
+                    }
+                }
+            }
+
+            $this->addFlash('notice', $translator->trans('admin.notice.box.products.added'));
+            return $this->redirectToRoute('admin_index');
+        }
+
+        return $this->render('Admin/Box/add_products.html.twig', [
+            'box'   => $box,
+            'form'  => $form->createView(),
+        ]);
     }
 
     /**
@@ -157,6 +295,7 @@ class BoxController extends AbstractController
                 $this->getDoctrine()->getManager()->flush();
             } catch (TransitionException $e) {
                 $this->logTransitionError($logger, $e, $box);
+                return $this->redirectToRoute('admin_index');
             }
         }
 
@@ -185,6 +324,7 @@ class BoxController extends AbstractController
                 $this->getDoctrine()->getManager()->flush();
             } catch (TransitionException $e) {
                 $this->logTransitionError($logger, $e, $box);
+                return $this->redirectToRoute('admin_index');
             }
         }
 
@@ -212,37 +352,19 @@ class BoxController extends AbstractController
                 $this->getDoctrine()->getManager()->flush();
             } catch (TransitionException $e) {
                 $this->logTransitionError($logger, $e, $box);
+                return $this->redirectToRoute('admin_index');
             }
         }
 
         return $this->redirectToRoute('admin_index');
     }
 
-    public function addProductsInvalidated(Box $box, Registry $workflows, LoggerInterface $logger)
-    {
-        if (null === $box) {
-            return $this->redirectToRoute('admin_index');
-        }
-
-        $workflow = $workflows->get($box);
-
-        if ($workflow->can($box, 'add_products_invalidated')) {
-            try {
-                $workflow->apply($box, 'add_products_invalidated');
-                $this->getDoctrine()->getManager()->flush();
-            } catch (TransitionException $e) {
-                $this->logTransitionError($logger, $e, $box);
-            }
-        }
-    }
-
     /**
      * @Security("is_granted('ROLE_ADMIN')")
      * @param Box $box
-     * @param Registry $workflows
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function view(Box $box, Registry $workflows)
+    public function view(Box $box)
     {
         if (null === $box) {
             /**
@@ -251,12 +373,14 @@ class BoxController extends AbstractController
             return $this->redirectToRoute('admin_index');
         }
 
-        $workflow = $workflows->get($box);
-        dump($workflow->getEnabledTransitions($box));
+        /**
+         * @var Box $eagerBox
+         */
+        $eagerBox = $this->getDoctrine()->getRepository(Box::class)->getBoxWithProducts($box);
 
         return $this->render('Admin/Box/view.html.twig', [
             'box'       => $box,
-            'boxProducts'  => $box->getBoxProducts(),
+            'boxProducts'  => $eagerBox->getBoxProducts(),
         ]);
     }
 
@@ -268,6 +392,8 @@ class BoxController extends AbstractController
     private function logTransitionError(LoggerInterface $logger, TransitionException $e, Box $box)
     {
         $pattern = 'Workflow %s: Transition %s on Box %s was not allowed';
-        $logger->error(sprintf($pattern, [$e->getWorkflow()->getName(), $e->getTransitionName(), $box->getTitle()]));
+        $msg = sprintf($pattern, $e->getWorkflow()->getName(), $e->getTransitionName(), $box->getTitle());
+        $logger->error($msg);
+        $this->addFlash('error', $msg);
     }
 }

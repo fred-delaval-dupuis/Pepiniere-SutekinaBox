@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BoxRepository")
@@ -25,11 +26,14 @@ class Box
     private $id;
 
     /**
+     * @Assert\NotBlank(message="assert.box.title.notblank")
      * @ORM\Column(type="string", length=255)
      */
     private $title;
 
     /**
+     * @Assert\NotNull(message="assert.box.budget.notnull")
+     * @Assert\GreaterThan(value=0, message="assert.box.budget.greaterthan")
      * @ORM\Column(type="integer")
      */
     private $budget;
@@ -53,7 +57,6 @@ class Box
     public function __construct()
     {
         $this->boxProducts = new ArrayCollection();
-        $this->test = new ArrayCollection();
     }
 
     /**

@@ -25,10 +25,6 @@ class AdminController extends Controller
     {
         $boxes = $this->getDoctrine()->getRepository(Box::class)->findAll();
 
-        $usersFromRole = $this->getDoctrine()->getRepository(User::class)->getUsersFromRole('ROLE_BOX_VALIDATOR');
-
-        dump($usersFromRole);
-
         return $this->render('Admin/index.html.twig', [
             'boxes' => $boxes,
         ]);

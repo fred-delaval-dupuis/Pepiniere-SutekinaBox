@@ -144,6 +144,18 @@
                     {#</div>#}
                 </div>
 
+                {% for message in app.flashes('notice') %}
+                    <div class="alert-info">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% for message in app.flashes('error') %}
+                    <div class="alert-warning">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
                 {% block main_content '' %}
 
             </main>

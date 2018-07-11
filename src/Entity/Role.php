@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RoleRepository")
@@ -17,6 +18,7 @@ class Role
     private $id;
 
     /**
+     * @Assert\NotBlank(message="assert.role.title.notblank")
      * @ORM\Column(type="string", length=255)
      */
     private $title;

@@ -1,7 +1,7 @@
 {% extends 'Admin/layout.html.twig' %}
 
 {% block main_content %}
-    {{ box.title }} | {{ box.budget }} | {{ box.user.lastName }} | {{ box.status }}
+    <p>{{ box.title }} | {{ box.budget }} | {{ box.user.lastName }} | {{ box.status }} | <a href="{{ url('admin_box_edit', {id: box.id}) }}">{{ 'admin.panel.box.edit'|trans }}</a> | <a href="{{ url('admin_box_edit_products', {id: box.id}) }}">{{ 'admin.panel.box.editproducts'|trans }}</a></p>
 
     {% if boxProducts %}
         {% for boxProduct in boxProducts %}

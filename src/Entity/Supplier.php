@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SupplierRepository")
@@ -19,11 +20,14 @@ class Supplier
     private $id;
 
     /**
+     * @Assert\NotBlank(message="assert.supplier.name.notblank")
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Assert\NotBlank(message="assert.supplier.email.notblank")
+     * @Assert\Email(message="assert.supplier.email.invalid")
      * @ORM\Column(type="string", length=255)
      */
     private $email;

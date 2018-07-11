@@ -25,11 +25,18 @@ box_edit:
     requirements:
         id: '\d+'
 
-box_add:
-    path: /box/add/{id}
+box_add_products:
+    path: /box/add-products/{id}
     controller: App\Controller\BoxController::addProducts
     requirements:
         id: '\d+'
+
+box_edit_products:
+    path: /box/edit-products/{id}
+    controller: App\Controller\BoxController::editProducts
+    requirements:
+        id: '\d+'
+
 box_order:
     path: /box/order/{id}
     controller: App\Controller\BoxController::order

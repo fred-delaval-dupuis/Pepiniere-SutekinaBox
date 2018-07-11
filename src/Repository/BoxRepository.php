@@ -47,4 +47,18 @@ class BoxRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getBoxWithProducts(Box $box)
+    {
+        return $this->createQueryBuilder('b')
+            ->innerJoin('b.boxProducts', 'bp')
+            ->addSelect('bp')
+            ->innerJoin('bp.product', 'p')
+            ->addSelect('p')
+            ->where('b.id = :id')
+            ->setParameter('id', $box->getId())
+            ->getQuery()
+            ->getSingleResult()
+        ;
+    }
 }

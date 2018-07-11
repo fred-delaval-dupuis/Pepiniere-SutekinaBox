@@ -34,7 +34,7 @@ class EventServiceMapper
             'invalidate' => [
                 'role'          => 'ROLE_BOX_CREATOR',
                 'mail-subject'    => 'Box %s has been invalidated',
-                'mail-body'     => 'Sorry, the Box %s has been deemed unsendable. Please see the description in the Box panel to update its content!'
+                'mail-body'     => 'Sorry, the Box %s has been deemed unsendable. Please read the description in the Box panel to update its content!'
             ],
             'add_products_invalidated' => [
                 'role'          => 'ROLE_BOX_CREATOR',

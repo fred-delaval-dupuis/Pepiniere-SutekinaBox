@@ -1,0 +1,32 @@
+{% extends 'Admin/layout.html.twig' %}
+
+{% block main_content %}
+
+    <div class="container">
+        <div class="row text-center bg-light">
+            <div class="col-md">
+                <p>#{{ box.id }} {{ box.title }}</p>
+                <p>{{ box.status }}</p>
+                <p>{{ 'form.box.twig.createdby'|trans }} <a href="mailto:{{ box.user.email }}">{{ box.user.firstName ~ ' ' ~ box.user.lastName }}</a></p>
+            </div>
+            <div class="col-md">
+                <p class="">{{ box.budget }} €</p>
+                <p id="total-price"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block final_javascripts %}
+    <script>
+
+    </script>
+{% endblock %}
+
+
+

@@ -63,13 +63,19 @@ class BoxProduct
      * @param \DateTime|null $receptionDate
      * @param bool|null $valid
      */
-    public function __construct(Box $box = null, Product $product = null, int $quantity = null, \DateTime $receptionDate = null, bool $valid = null)
+    public function __construct(Box $box = null, Product $product = null, int $quantity = 1, \DateTime $receptionDate = null, bool $valid = null)
     {
         $this->quantity = $quantity;
         $this->receptionDate = $receptionDate;
         $this->valid = $valid;
         $this->box = $box;
+//        if (null !== $box) {
+//            $box->addBoxProduct($this);
+//        }
         $this->product = $product;
+//        if (null !== $product) {
+//            $product->addBoxProduct($this);
+//        }
     }
 
 

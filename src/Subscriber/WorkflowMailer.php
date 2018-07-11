@@ -13,6 +13,7 @@ use App\Entity\Box;
 use App\Entity\User;
 use App\Service\EventServiceMapper;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 
@@ -34,16 +35,30 @@ class WorkflowMailer implements EventSubscriberInterface
     private $manager;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var string
+     */
+    private $adminEmail;
+
+    /**
      * WorkflowMailer constructor.
      * @param \Swift_Mailer $mailer
      * @param EventServiceMapper $mapper
      * @param EntityManagerInterface $manager
+     * @param LoggerInterface $logger
+     * @param string $adminEMail
      */
-    public function __construct(\Swift_Mailer $mailer, EventServiceMapper $mapper, EntityManagerInterface $manager)
+    public function __construct(\Swift_Mailer $mailer, EventServiceMapper $mapper, EntityManagerInterface $manager, LoggerInterface $logger, string $adminEMail)
     {
-        $this->mailer   = $mailer;
-        $this->mapper   = $mapper;
-        $this->manager  = $manager;
+        $this->mailer       = $mailer;
+        $this->mapper       = $mapper;
+        $this->manager      = $manager;
+        $this->logger       = $logger;
+        $this->adminEmail   = $adminEMail;
     }
 
     public static function getSubscribedEvents()
@@ -77,7 +92,7 @@ class WorkflowMailer implements EventSubscriberInterface
         /**
          * @TODO decide which email to set as From
          */
-        $message->addFrom('email');
+        $message->addFrom($this->adminEmail);
 
         /**
          * @var User $user
@@ -85,6 +100,9 @@ class WorkflowMailer implements EventSubscriberInterface
         foreach ($users as $user) {
             $message->addTo($user->getEmail());
         }
+
+        $tos = array_keys($message->getTo());
+        $this->logger->debug('Mail "' .  $message->getSubject() . '" sent to: ' . implode(', ', $tos) . ' with content: ' . $message->getBody());
 
 //        $this->mailer->send($message);
     }
