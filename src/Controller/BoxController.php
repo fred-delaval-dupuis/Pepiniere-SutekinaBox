@@ -137,9 +137,6 @@ class BoxController extends AbstractController
             # Products Management
             $products = $form->getData()['products'];
 
-            dump($products);
-            return $this->render('Admin/index.html.twig');
-
             /**
              * @var Product $product
              */
@@ -211,16 +208,31 @@ class BoxController extends AbstractController
             return $this->redirectToRoute('admin_index');
         }
 
-        $form = $this->createForm(BoxProductsType::class, ['products' => $em->getRepository(Product::class)->getProductsFromBox($box)]);
+        $currentProducts = $em->getRepository(Product::class)->getProductsFromBox($box);
+
+        $form = $this->createForm(BoxProductsType::class, ['products' => $currentProducts]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             # Products Management
-            $products = $form->getData()['products'];
+            $submittedProducts = $form->getData()['products'];
 
-//            dump($products);
+            dump($submittedProducts);
+
+            $newProducts = array_udiff($submittedProducts, $currentProducts, [$this, 'productDiff']);
+            dump($newProducts);
+
+            $deleteProducts = array_udiff($currentProducts, $submittedProducts, [$this, 'productDiff']);
+            dump($deleteProducts);
+
+            # Product <-> Box deletion
+
+            $boxProducts = $em->getRepository(BoxProduct::class)->findBy(['id' => [array_map(function($product) { return $product->getId(); }, $deleteProducts)]]);
+            dump(array_map(function($product) { return $product->getId(); }, $deleteProducts));
+            dump($boxProducts);
+
             return $this->render('Admin/index.html.twig');
 
             /**
@@ -395,5 +407,10 @@ class BoxController extends AbstractController
         $msg = sprintf($pattern, $e->getWorkflow()->getName(), $e->getTransitionName(), $box->getTitle());
         $logger->error($msg);
         $this->addFlash('error', $msg);
+    }
+
+    private function productDiff(Product $a, Product $b)
+    {
+        return $a->getId() <=> $b->getId();
     }
 }
