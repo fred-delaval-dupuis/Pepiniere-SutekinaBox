@@ -25,23 +25,39 @@
         $(document).ready(function() {
 
             var checkValidity = function() {
-                var filled = true;
+                var datesFilled = true;
+                var valid = true;
                 $('.js-datepicker').each(function() {
                     if ($(this).val().length != 0) {
-                        filled &= true;
+                        datesFilled &= true;
                     } else {
-                        filled &= false;
+                        datesFilled &= false;
                     }
                 });
 
-                if (filled) {
-                    $('#box_products_submit').removeAttr('disabled');
+                $('input[type="checkbox"]').each(function() {
+                    if ($(this).prop("checked")) {
+                        valid &= true;
+                    } else {
+                        valid &= false;
+                    }
+                });
+
+                if (datesFilled && valid) {
+                    $('#box_products_validate').removeAttr('disabled');
                 } else {
-                    $('#box_products_submit').attr('disabled', 'disabled');
+                    $('#box_products_validate').attr('disabled', 'disabled');
+                }
+
+                if (datesFilled && ! valid) {
+                    $('#box_products_invalidate').removeAttr('disabled');
+                } else {
+                    $('#box_products_invalidate').attr('disabled', 'disabled');
                 }
             };
 
-            $('#box_products_submit').attr('disabled', 'disabled');
+            $('#box_products_validate').attr('disabled', 'disabled');
+            $('#box_products_invalidate').attr('disabled', 'disabled');
 
             checkValidity();
 
@@ -50,6 +66,7 @@
             });
 
             $('.js-datepicker').change(checkValidity);
+            $('input[type="checkbox"]').change(checkValidity);
 
         });
     </script>

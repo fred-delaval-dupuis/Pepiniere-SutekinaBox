@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Box
 {
     const BOX_CREATED           = 'box_created';
-    const WAITING_FOR_PRODUCTS  = 'waiting_for_products';
+    const BOX_FILLED            = 'box_filled';
     const VALIDATION            = 'validation';
     const INVALIDATED           = 'invalidated';
     const GO                    = 'go';

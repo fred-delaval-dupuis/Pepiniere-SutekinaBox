@@ -2,9 +2,27 @@
 
 {% block main_content %}
     {% if boxes is defined %}
-        <ul>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{{ 'admin.panel.table.title'|trans }}</th>
+                    <th>{{ 'admin.panel.table.budget'|trans }}</th>
+                    <th>{{ 'admin.panel.table.username'|trans }}</th>
+                    <th>{{ 'admin.panel.table.status'|trans }}</th>
+                    <th>{{ 'admin.panel.table.actions'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
         {% for box in boxes %}
-            <li><a href="{{ url('admin_box_view', {id: box.id}) }}">{{ box.title }} | {{ box.budget }} | {{ box.user.lastName }} | {{ box.status }}</a>
+                    <tr>
+                        <td><a href="{{ url('admin_box_view', {id: box.id}) }}">{{ box.id }}</a></td>
+                        <td><a href="{{ url('admin_box_view', {id: box.id}) }}">{{ box.title }}</a></td>
+                        <td>{{ box.budget }}</td>
+                        <td>{{ box.user.firstName ~ ' ' ~ box.user.lastName }}</td>
+                        <td>{{ box.status }}</td>
+                        <td>
 
                 {# CREATOR #}
                 
@@ -12,14 +30,14 @@
 
                     {# Place: box_created -> box filled #}
                     {% if box.status == 'box_created' or box.status == 'invalidated' %}
-                        | <a href="{{ url('admin_box_edit', {id: box.id}) }}">{{ 'admin.panel.link.edit'|trans }}Edit</a>
+                        <a href="{{ url('admin_box_edit', {id: box.id}) }}">{{ 'admin.panel.link.edit'|trans }}</a>
 
                         {#{% if box.boxProducts|length > 0 %}#}
                             {#| <a href="{{ url('admin_box_edit_products', {id: box.id}) }}">{{ 'admin.panel.link.edit'|trans }}Edit Box Products</a>#}
                         {#{% else %}#}
                             {#| <a href="{{ url('admin_box_add_products', {id: box.id}) }}">{{ 'admin.panel.link.fiil'|trans }}Fill Box</a>#}
                         {#{% endif %}#}
-                        | <a href="{{ url('admin_box_edit_products', {id: box.id}) }}">{{ 'admin.panel.link.fiil'|trans }}Fill Box</a>
+                        | <a href="{{ url('admin_box_edit_products', {id: box.id}) }}">{{ 'admin.panel.link.fiil'|trans }}</a>
                     {% endif %}
 
                 {% endif %}
@@ -30,25 +48,29 @@
 
                     {# Place: box-filled -> validation #}
                     {% if box.status == 'box_filled' %}
-                        | <a href="{{ url('admin_box_order', {id: box.id}) }}">{{ 'admin.panel.link.order'|trans }}Order Products</a>
+                        <a href="{{ url('admin_box_order', {id: box.id}) }}">{{ 'admin.panel.link.order'|trans }}</a>
                     {% endif %}
                     
                     {# Place: validation -> invalidated | go #}
                     {% if box.status == 'validation' %}
-                        | <a href="{{ url('admin_box_validate', {id: box.id}) }}">{{ 'admin.panel.link.box.validate'|trans }}Validate Box</a>
-                        | <a href="{{ url('admin_box_invalidate', {id: box.id}) }}">{{ 'admin.panel.link.box.invalidate'|trans }}Invalidate Box</a>
+                        | <a href="{{ url('admin_box_validate', {id: box.id}) }}">{{ 'admin.panel.link.box.validate'|trans }}</a>
+                        {#| <a href="{{ url('admin_box_invalidate', {id: box.id}) }}">{{ 'admin.panel.link.box.invalidate'|trans }}Invalidate Box</a>#}
                     {% endif %}
 
                 {% endif %}
-            </li>
+                        </td>
         {% endfor %}
-        </ul>
+                    </tr>
     {% else %}
         <p>{{ 'admin.panel.msg.nobox'|trans }}0 box found</p>
         <p>{% if is_granted('ROLE_BOX_CREATOR') %}
-                <a href="{{ url('admin_box_create') }}">{{ 'admin.panel.msg.box.create'|trans }}Create a new Box here!</a>
+                <a href="{{ url('admin_box_create') }}">{{ 'admin.panel.msg.box.create'|trans }}</a>
             {% endif %}
         </p>
     {% endif %}
+
+                </tbody>
+            </table>
+        </div>
 
 {% endblock %}

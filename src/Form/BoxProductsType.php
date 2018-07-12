@@ -3,9 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Box;
-use App\Entity\BoxProduct;
 use App\Helper\TranslatorHelperTrait;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -26,8 +24,11 @@ class BoxProductsType extends AbstractType
             ->add('save', SubmitType::class, [
                 'label' => $this->translator->trans('admin.forms.btn.save'),
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => $this->translator->trans('admin.forms.btn.submit'),
+            ->add('validate', SubmitType::class, [
+                'label' => $this->translator->trans('admin.forms.btn.validate'),
+            ])
+            ->add('invalidate', SubmitType::class, [
+                'label' => $this->translator->trans('admin.forms.btn.invalidate'),
             ])
         ;
     }

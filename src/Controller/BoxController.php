@@ -328,12 +328,24 @@ class BoxController extends AbstractController
 
             $em->flush();
 
-            if ($form->get('submit')->isClicked()) {
+            if ($form->get('validate')->isClicked()) {
                 $workflow = $workflows->get($box);
 
                 if ($workflow->can($box, 'validate')) {
                     try {
                         $workflow->apply($box, 'validate');
+                        $em->flush();
+                    } catch (TransitionException $e) {
+                        $this->logTransitionError($logger, $e, $box);
+                        return $this->redirectToRoute('admin_index');
+                    }
+                }
+            } elseif ($form->get('invalidate')->isClicked()) {
+                $workflow = $workflows->get($box);
+
+                if ($workflow->can($box, 'invalidate')) {
+                    try {
+                        $workflow->apply($box, 'invalidate');
                         $em->flush();
                     } catch (TransitionException $e) {
                         $this->logTransitionError($logger, $e, $box);

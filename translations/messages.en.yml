@@ -1,0 +1,18 @@
+form.box.twig.createdby: 'Created By'
+admin.panel.box.edit: 'Edit Box'
+admin.panel.box.editproducts: 'Edit Products'
+admin.panel.table.title: Boxes
+admin.panel.table.budget: Budget
+admin.panel.table.username: Username
+admin.panel.table.status: Status
+admin.panel.table.actions: Actions
+admin.panel.link.edit: 'Edit Box'
+admin.panel.link.fiil: 'Edit Products'
+admin.panel.link.order: 'Order Products'
+admin.panel.link.box.validate: Validate
+admin.panel.msg.nobox: ' box found!'
+admin.panel.msg.box.create: 'Create a new Box here!'
+admin.panel.title: SutekinaBox
+admin.panel.logout: 'Sign Out'
+admin.login.title: 'Log in'
+admin.panel.sidebar.box.create: "Create a Box"
