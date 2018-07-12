@@ -53,7 +53,7 @@
                     
                     {# Place: validation -> invalidated | go #}
                     {% if box.status == 'validation' %}
-                        | <a href="{{ url('admin_box_validate', {id: box.id}) }}">{{ 'admin.panel.link.box.validate'|trans }}</a>
+                        <a href="{{ url('admin_box_validate', {id: box.id}) }}">{{ 'admin.panel.link.box.validate'|trans }}</a>
                         {#| <a href="{{ url('admin_box_invalidate', {id: box.id}) }}">{{ 'admin.panel.link.box.invalidate'|trans }}Invalidate Box</a>#}
                     {% endif %}
 

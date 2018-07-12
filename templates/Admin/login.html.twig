@@ -1,7 +1,7 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% block title %}
-    Login Template for Bootstrap
+    {{ 'admin.login.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -18,7 +18,7 @@
 
     {{ form_start(form, {'attr': {'class': 'form-signin'}}) }}
     <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-    <h1 class="h3 mb-3 font-weight-normal">{{ 'admin.login.title' | trans }}Please sign in</h1>
+    <h1 class="h3 mb-3 font-weight-normal">{{ 'admin.login.title'|trans }}</h1>
 
     {# Email input #}
     {{ form_label(form.email) }}

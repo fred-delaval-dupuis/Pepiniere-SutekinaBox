@@ -14,7 +14,7 @@ admin.panel.msg.nobox: ' box found!'
 admin.panel.msg.box.create: 'Create a new Box here!'
 admin.panel.title: SutekinaBox
 admin.panel.logout: 'Sign Out'
-admin.login.title: 'Log in'
+admin.login.title: 'Please Sign In'
 admin.panel.sidebar.box.create: 'Create a Box'
 admin.panel.sidebar.home: Dashboard
 admin.forms.btn.save: Save
@@ -24,3 +24,5 @@ admin.forms.boxproducts.date: 'Reception Date'
 admin.forms.boxproduct.checkbox: 'Is Valid ?'
 admin.forms.btn.validate: Validate
 admin.forms.btn.invalidate: Invalidate
+admin.notice.box.products.added: 'The products have been successfully added!'
+admin.success.box.validation.saved: 'The validation has been saved!'
