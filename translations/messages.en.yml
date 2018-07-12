@@ -15,4 +15,12 @@ admin.panel.msg.box.create: 'Create a new Box here!'
 admin.panel.title: SutekinaBox
 admin.panel.logout: 'Sign Out'
 admin.login.title: 'Log in'
-admin.panel.sidebar.box.create: "Create a Box"
+admin.panel.sidebar.box.create: 'Create a Box'
+admin.panel.sidebar.home: Dashboard
+admin.forms.btn.save: Save
+admin.forms.btn.submit: Submit
+admin.box.form.submit: Submit
+admin.forms.boxproducts.date: 'Reception Date'
+admin.forms.boxproduct.checkbox: 'Is Valid ?'
+admin.forms.btn.validate: Validate
+admin.forms.btn.invalidate: Invalidate
