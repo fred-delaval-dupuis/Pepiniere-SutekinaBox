@@ -2,27 +2,28 @@
 
 namespace App\Form;
 
-use App\Entity\Box;
-use App\Entity\BoxProduct;
+use App\Entity\Product;
 use App\Helper\TranslatorHelperTrait;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BoxProductsType extends AbstractType
+class ProductsType extends AbstractType
 {
     use TranslatorHelperTrait;
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('boxProducts', CollectionType::class, array(
-                'entry_type'    => BoxProductType::class,
-                'entry_options' => ['label' => false],
-            ))
+            ->add('products', EntityType::class, [
+                'class'         => Product::class,
+                'choice_value'  => 'id',
+                'choice_label'  => 'label',
+                'multiple'      => true,
+                'expanded'      => true,
+            ])
             ->add('save', SubmitType::class, [
                 'label' => $this->translator->trans('admin.forms.btn.save'),
             ])
@@ -35,8 +36,6 @@ class BoxProductsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Box::class,
         ]);
     }
-
 }

@@ -1,0 +1,57 @@
+{% extends 'Admin/layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" integrity="sha256-JDBcnYeV19J14isGd3EtnsCQK05d8PczJ5+fvEvBJvI=" crossorigin="anonymous" />
+{% endblock %}
+
+
+{% block main_content %}
+    {{ form_start(form) }}
+    {% set boxProducts = form.boxProducts %}
+    {% for boxProduct in boxProducts %}
+        {%  set product = boxProduct.vars.value.product %}
+        <h4>#{{ product.id ~ ' - ' ~ product.label }}</h4>
+        {{ form_widget(boxProduct) }}
+    {% endfor %}
+
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block final_javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js" integrity="sha256-ncetQ5WcFxZU3YIwggfwOwmewLVX4SHLBtDYnrsxooY=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+
+            var checkValidity = function() {
+                var filled = true;
+                $('.js-datepicker').each(function() {
+                    if ($(this).val().length != 0) {
+                        filled &= true;
+                    } else {
+                        filled &= false;
+                    }
+                });
+
+                if (filled) {
+                    $('#box_products_submit').removeAttr('disabled');
+                } else {
+                    $('#box_products_submit').attr('disabled', 'disabled');
+                }
+            };
+
+            $('#box_products_submit').attr('disabled', 'disabled');
+
+            checkValidity();
+
+            $('.js-datepicker').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+
+            $('.js-datepicker').change(checkValidity);
+
+        });
+    </script>
+{% endblock %}
+

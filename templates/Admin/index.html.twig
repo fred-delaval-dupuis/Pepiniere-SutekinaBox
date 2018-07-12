@@ -14,17 +14,16 @@
                     {% if box.status == 'box_created' or box.status == 'invalidated' %}
                         | <a href="{{ url('admin_box_edit', {id: box.id}) }}">{{ 'admin.panel.link.edit'|trans }}Edit</a>
 
-                        {% if box.boxProducts|length > 0 %}
-                            | <a href="{{ url('admin_box_edit_products', {id: box.id}) }}">{{ 'admin.panel.link.edit'|trans }}Edit Box Products</a>
-                        {% else %}
-                            | <a href="{{ url('admin_box_add_products', {id: box.id}) }}">{{ 'admin.panel.link.fiil'|trans }}Fill Box</a>
-                        {% endif %}
-
+                        {#{% if box.boxProducts|length > 0 %}#}
+                            {#| <a href="{{ url('admin_box_edit_products', {id: box.id}) }}">{{ 'admin.panel.link.edit'|trans }}Edit Box Products</a>#}
+                        {#{% else %}#}
+                            {#| <a href="{{ url('admin_box_add_products', {id: box.id}) }}">{{ 'admin.panel.link.fiil'|trans }}Fill Box</a>#}
+                        {#{% endif %}#}
+                        | <a href="{{ url('admin_box_edit_products', {id: box.id}) }}">{{ 'admin.panel.link.fiil'|trans }}Fill Box</a>
                     {% endif %}
 
                 {% endif %}
-
-
+                
                 {# VALIDATOR #}
             
                 {% if is_granted('ROLE_BOX_VALIDATOR') %}

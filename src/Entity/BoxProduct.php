@@ -69,13 +69,7 @@ class BoxProduct
         $this->receptionDate = $receptionDate;
         $this->valid = $valid;
         $this->box = $box;
-//        if (null !== $box) {
-//            $box->addBoxProduct($this);
-//        }
         $this->product = $product;
-//        if (null !== $product) {
-//            $product->addBoxProduct($this);
-//        }
     }
 
 

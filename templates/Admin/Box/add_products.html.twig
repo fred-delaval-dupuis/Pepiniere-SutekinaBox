@@ -24,7 +24,28 @@
 
 {% block final_javascripts %}
     <script>
+        $(document).ready(function() {
 
+            var checkValidity = function() {
+                var filled = false;
+                $('#products .form-check input').each(function() {
+                    filled |= $(this).prop('checked');
+                });
+
+                if (!filled) {
+                    $('#products_submit').attr('disabled', 'disabled');
+                } else {
+                    $('#products_submit').removeAttr('disabled');
+                }
+            };
+
+            $('#products_submit').attr('disabled', 'disabled');
+
+            checkValidity();
+
+            $('#products .form-check input').change(checkValidity);
+
+        });
     </script>
 {% endblock %}
 

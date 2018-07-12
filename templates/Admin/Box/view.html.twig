@@ -1,7 +1,14 @@
 {% extends 'Admin/layout.html.twig' %}
 
 {% block main_content %}
-    <p>{{ box.title }} | {{ box.budget }} | {{ box.user.lastName }} | {{ box.status }} | <a href="{{ url('admin_box_edit', {id: box.id}) }}">{{ 'admin.panel.box.edit'|trans }}</a> | <a href="{{ url('admin_box_edit_products', {id: box.id}) }}">{{ 'admin.panel.box.editproducts'|trans }}</a></p>
+    <p>{{ box.title }} | {{ box.budget }} | {{ box.user.lastName }} | {{ box.status }}
+        {% if is_granted('ROLE_BOX_CREATOR') %}
+            | <a href="{{ url('admin_box_edit', {id: box.id}) }}">{{ 'admin.panel.box.edit'|trans }}</a>
+            {% if box.status == 'box_created' %}
+                | <a href="{{ url('admin_box_edit_products', {id: box.id}) }}">{{ 'admin.panel.box.editproducts'|trans }}</a>
+            {% endif %}
+        {% endif %}
+    </p>
 
     {% if boxProducts %}
         {% for boxProduct in boxProducts %}
@@ -11,7 +18,7 @@
                 <p>{{ boxProduct.product.price }}</p>
                 <p>{{ boxProduct.quantity }}</p>
                 {% if boxProduct.receptionDate %}
-                    <p>{{ boxProduct.receptionDate }}</p>
+                    <p>{{ boxProduct.receptionDate|date('d-M-Y') }}</p>
                 {% endif %}
                 {% if boxProduct.valid %}
                     <p>{{ boxProduct.valid }}</p>
